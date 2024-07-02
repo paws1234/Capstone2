@@ -1,0 +1,7 @@
+services:
+  - name: web
+    build_command: npm install && npm run mix:dev
+    start_command: php artisan serve --host 0.0.0.0 --port $PORT
+    env:
+      - key: MIX_APP_URL
+        from_secret: your_mix_app_url_secret
