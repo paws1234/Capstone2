@@ -1,6 +1,16 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeacherController;
+
+Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth:sanctum');
+
+Route::get('/teachers', [TeacherController::class, 'index']);
+Route::post('/teachers', [TeacherController::class, 'store']);
+Route::get('/teachers/{teacher}', [TeacherController::class, 'show']);
+Route::put('/teachers/{teacher}', [TeacherController::class, 'update']);
+Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
