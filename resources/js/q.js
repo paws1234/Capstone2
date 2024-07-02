@@ -1,53 +1,39 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './components/auth/login'; // Adjust path as needed
+import Register from './components/auth/Register'; // Adjust path as needed
+import AdminDashboard from './components/AdminDashboard';
+import TeacherDashboard from './components/TeacherDashboard';
+import StudentDashboard from './components/StudentDashboard';
+import TeachersList from './components/TeachersList'; // Import TeachersList component
+import AddTeacher from './components/AddTeacher'; // Import AddTeacher component
+import EditTeacher from './components/EditTeacher'; // Import EditTeacher component
 
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
-import Login from './components/auth/login.jsx'; // Adjust path as needed
-import Register from './components/auth/Register.jsx'; // Adjust path as needed
-import AdminDashboard from './components/AdminDashboard.jsx';
-import TeacherDashboard from './components/TeacherDashboard.jsx';
-import StudentDashboard from './components/StudentDashboard.jsx';
+const App = () => {
+    return (
+        <Router>
+            <Routes>
+                {/* Public routes */}
+                <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
-const Dashboard = () => {
-    const [user, setUser] = useState(null);
-    console.log('User state:', user);
-    const handleLogin = (loggedInUser) => {
-        setUser(loggedInUser);
-    };
+                {/* Admin Dashboard and related routes */}
+                <Route path="/admin/*" element={<AdminDashboard />}>
+                    <Route index element={<AdminDashboard />} />
+                    <Route path="teachers" element={<TeachersList />} />
+                    <Route path="teachers/add" element={<AddTeacher />} />
+                    <Route path="teachers/edit/:id" element={<EditTeacher />} />
+                </Route>
 
-    const handleRegister = (registeredUser) => {
-        setUser(registeredUser);
-    };
-
-    if (!user) {
-        return (
-            <div>
-                <Login onLogin={handleLogin} />
-                <Register onRegister={handleRegister} />
-            </div>
-        );
-    }
-
-    let dashboardComponent;
-
-    switch (user.role) {
-        case 'admin':
-            dashboardComponent = <AdminDashboard />;
-            break;
-        case 'teacher':
-            dashboardComponent = <TeacherDashboard />;
-            break;
-        case 'student':
-            dashboardComponent = <StudentDashboard />;
-            break;
-        default:
-            dashboardComponent = <div>User role not recognized.</div>;
-            break;
-    }
-
-    const root = ReactDOM.createRoot(document.getElementById('dashboard'));
-    root.render(dashboardComponent);
-
-    return null; 
+                {/* Teacher and Student dashboards */}
+                <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+                <Route path="/student/dashboard" element={<StudentDashboard />} />
+            </Routes>
+        </Router>
+    );
 };
 
-export default Dashboard;
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(<App />);
